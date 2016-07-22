@@ -6,7 +6,7 @@ module BotInstall
 
     private
     def install_gems
-      GemInstall.install_gem_library
+      GemInstall.install_gem_library(false)
     end
 
     def setup_db
