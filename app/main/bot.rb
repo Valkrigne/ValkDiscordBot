@@ -1,5 +1,4 @@
 require 'discordrb'
-require_relative './mtg'
 
 class DiscordBot
 	def initialize(*args)
@@ -26,10 +25,6 @@ class DiscordBot
 				response = eval(command)
 				event.respond(response)
 			end
-		end
-
-		bot.message(containing: "genji") do |event|
-			event.respond(old_name + " renamed to GenjiScum, maybe..." )
 		end
 	end
 

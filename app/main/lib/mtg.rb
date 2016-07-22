@@ -1,5 +1,3 @@
-require_relative './api_connector'
-
 module MTG
   class << self
     def search(query)
