@@ -1,3 +1,5 @@
-'rest-client'
-'json'
-'discordrb'
+rest-client
+json
+discordrb
+pg
+rbnacl

@@ -32,7 +32,3 @@ class DiscordBot
 		@members ||= bot.server.members
 	end
 end
-
-bot = DiscordBot.new
-bot.register_events
-bot.run_bot
