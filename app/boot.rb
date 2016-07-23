@@ -1,6 +1,7 @@
 require './options.rb'
 require './config/gem_check.rb'
 require './config/gem_install.rb'
+require './config/bot_install.rb'
 require './initializer.rb'
 require './main/main.rb'
 
@@ -12,7 +13,7 @@ if options[:check]
 end
 
 if options[:install]
-  BotInstall.install_dependencies
+  BotInstall.install
   exit
 end
 
@@ -20,7 +21,7 @@ end
 GemCheck.check_gem_library(false)
 
 # run initializers
-initialize
+initialize_environment
 
 # run bot
 run_bot
