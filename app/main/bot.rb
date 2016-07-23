@@ -39,7 +39,7 @@ class DiscordBot
 		bot.message(contaning: [/!(?:bot|athena)/i]) do |event|
 			user = get_user(event.message.author)
 			help_response = "bot/athena: <message> will be recorded\nie: athena: this bot doesnt do shit"
-			event.respond(response)
+			event.respond(help_response)
 		end
 	end
 
