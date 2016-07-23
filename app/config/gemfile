@@ -4,3 +4,8 @@ discordrb
 pg
 rbnacl
 activerecord
+simplecov
+rspec
+shoulda-matchers
+fivemat
+factory_girl

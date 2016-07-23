@@ -1,17 +1,20 @@
 require 'discordrb'
 
 class DiscordBot
-	def initialize(*args)
-		@token = 'MjA0MTkxNzI3OTc0NzQ0MDY1.Cmz33Q.gTitaYpM_ud4WcUfO8MwE6YnlGs'
-		@app_id = 204191727974744065
+	def token
+		@token = BOT_ENV[:bot][:token]
+	end
+
+	def app_id
+		@app_id = BOT_ENV[:bot][:app_id]
 	end
 
 	def channels
-		return 204366501300535307 # bot room
+		return BOT_ENV[:channels]
 	end
 
 	def bot
-		@bot ||= Discordrb::Bot.new token: @token, application_id: @app_id
+		@bot ||= Discordrb::Bot.new token: token, application_id: app_id
 	end
 
 	def run_bot
