@@ -26,14 +26,6 @@ class DiscordBot
 	end
 
 	def register_events
-		# bot.message(from: "Valkrigne", containing: /(?:bot: )/) do |event|
-		# 	if (event.message.author.id == 73056257883254784)
-		# 		command = event.message.content.gsub(/^(?:bot: )(.*)/, '\1')
-		# 		response = eval(command)
-		# 		event.respond(response)
-		# 	end
-		# end
-
 		bot.message(with_text: /^(?:(?:bot|athena)\:\s)/i ) do |event|
 			user = get_user(event.message.author)
 			::RecordedMessage.create(user_id: user.id, message: event.message.content.gsub(/^(?:(?:bot|athena): )/i, ''))
@@ -44,15 +36,6 @@ class DiscordBot
 			help_response = "bot/athena: <message> will be recorded\nie: athena: this bot doesnt do shiti\n!mh <monster_name> retunrs kiranico url"
 			event.respond(help_response)
 		end
-
-		# MH matchers
-		# bot.message(with_text: /!mh\s\w+\s.*/i) do |event|
-		# 	results = 'placeholder'
-		# 	event.message.content.gsub(/(?:!mh\s)(\w+)\s(.*)/) do
-		# 		results = Kiranico.search($1, $2).join("\n")
-		# 	end
-		# 	event.respond(results)
-		# end
 
 		bot.message(with_text: /!mh\s(.*)/i) do |event|
 			results = 'placeholder'

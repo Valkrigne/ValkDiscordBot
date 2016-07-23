@@ -1,6 +1,7 @@
 
 app/config/database.yml
 app/config/application.yml
+app/coverage
 
 # defaults
 *.gem

@@ -1,6 +1,6 @@
 module GemCheck
   def self.check_gem_library(output)
-    gemfile = File.new('./config/gemfile')
+    gemfile = File.new('./app/config/gemfile')
     dependecy_met = true
 
     while (line = gemfile.gets)
@@ -9,7 +9,7 @@ module GemCheck
       *gem_ver_reqs = g[1] unless g[1].nil?
 
       gdep = Gem::Dependency.new(gem_name, *gem_ver_reqs)
-      # find latest that satisifies
+
       found_gspec = gdep.matching_specs.max_by(&:version)
 
       if found_gspec

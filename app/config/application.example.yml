@@ -1,6 +1,6 @@
 bot:
-  BOT_TOKEN: '<your_bot_token'
-  APP_ID: '<your_app_id>'
+  BOT_TOKEN: 'bot_token'
+  APP_ID: '1263445678624'
 
 channels:
-  test: <channel_id>
+  test: 123456789
