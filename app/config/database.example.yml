@@ -1,0 +1,5 @@
+host: 'localhost'
+adapter: 'postgresql'
+encoding: utf-8
+database: '<database>'
+password: '<your_db_password>'
