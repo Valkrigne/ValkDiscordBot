@@ -1,5 +1,4 @@
-def initialize
-  require 'yaml'
-  require './initializers/assets.rb'
-  require './initializers/bot.rb'
-end
+require 'yaml'
+require 'active_record'
+Dir[('main/**/*.rb')].each { |f| require "./#{f}" }
+Dir[('initializers/**/*.rb')].each { |f| require "./#{f}" }

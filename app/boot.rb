@@ -2,7 +2,6 @@ require './options.rb'
 require './config/gem_check.rb'
 require './config/gem_install.rb'
 require './config/bot_install.rb'
-require './initializer.rb'
 require './main/main.rb'
 
 options = option_parse
@@ -21,7 +20,7 @@ end
 GemCheck.check_gem_library(false)
 
 # run initializers
-initialize_environment
+require './initializer.rb'
 
 # run bot
 run_bot
