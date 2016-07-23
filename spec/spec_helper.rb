@@ -22,7 +22,7 @@ SimpleCov.start do
   add_group  'Models', 'app/main/models'
 end
 
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../../app/config/environment/test', __FILE__)
 
 RSpec.configure do |config|
 

@@ -1,5 +1,5 @@
-require './options.rb'
-require File.expand_path('../config/environment.rb', __FILE__)
+require './app/options.rb'
+require File.expand_path('..app//config/environment/production.rb', __FILE__)
 
 options = option_parse
 
