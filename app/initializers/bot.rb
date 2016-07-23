@@ -1,3 +1,3 @@
-require_relative '../app/main/bot.rb'
+require './app/main/bot.rb'
 @bot = DiscordBot.new
 @bot.register_events

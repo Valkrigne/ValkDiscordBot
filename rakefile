@@ -1,11 +1,11 @@
-import './app/db/db.rake'
-task default: %w[test]
+require 'rspec'
+require 'rspec/core/rake_task'
 
-task :test do
+import './db/db.rake'
+task default: %w[spec]
+
+task :spec do
   RSpec::Core::RakeTask.new(:spec) do |t|
     t.pattern = Dir.glob('app/spec/**/*_spec.rb')
-    t.rspec_opts = '--format documentation'
-    # t.rspec_opts << ' more options'
-    t.rcov = true
   end
 end
