@@ -34,15 +34,32 @@ class DiscordBot
 		# 	end
 		# end
 
-		bot.message(containing: [/^(?:(?:bot|athena): )/i] ) do |event|
+		bot.message(with_text: /^(?:(?:bot|athena)\:\s)/i ) do |event|
 			user = get_user(event.message.author)
 			::RecordedMessage.create(user_id: user.id, message: event.message.content.gsub(/^(?:(?:bot|athena): )/i, ''))
 		end
 
-		bot.message(contaning: [/!(?:bot|athena)/i]) do |event|
+		bot.message(with_text: /!(?:bot|athena)/i) do |event|
 			user = get_user(event.message.author)
 			help_response = "bot/athena: <message> will be recorded\nie: athena: this bot doesnt do shit"
 			event.respond(help_response)
+		end
+
+		# MH matchers
+		# bot.message(with_text: /!mh\s\w+\s.*/i) do |event|
+		# 	results = 'placeholder'
+		# 	event.message.content.gsub(/(?:!mh\s)(\w+)\s(.*)/) do
+		# 		results = Kiranico.search($1, $2).join("\n")
+		# 	end
+		# 	event.respond(results)
+		# end
+
+		bot.message(with_text: /!mh\s(.*)/i) do |event|
+			results = 'placeholder'
+			event.message.content.gsub(/(?:!mh\s)(.*)/) do
+				results = Kiranico.search_monster($1).join("\n")
+			end
+			event.respond(results)
 		end
 	end
 
