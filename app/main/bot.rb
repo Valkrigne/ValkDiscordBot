@@ -19,7 +19,7 @@ class DiscordBot
 	end
 
 	def get_user(author)
-		return ::User.find_or_create(event.message.author.id, event.message.author.display_name)
+		return ::User.find_or_create(author.id, author.display_name)
 	end
 
 	def register_events
