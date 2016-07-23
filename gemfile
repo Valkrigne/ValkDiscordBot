@@ -14,4 +14,4 @@ end
 gem 'json'
 gem 'discordrb'
 gem 'pg'
-gem 'activerecord'
+gem 'activerecord', '~>4.2.0'
