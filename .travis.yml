@@ -9,6 +9,7 @@ deploy:
     tags: true
 
 install:
+  - chmod 777 ./bin/install.sh
   - ./bin/install.sh
   - BUNDLE_GEMFILE=gemfile bundle install
 
