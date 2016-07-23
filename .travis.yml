@@ -7,3 +7,5 @@ deploy:
   api_key: "YOUR API KEY"
   on:
     tags: true
+
+script: bundle install && rspec spec
