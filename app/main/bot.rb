@@ -37,15 +37,6 @@ class DiscordBot
 			event.respond(help_response)
 		end
 
-		# MH matchers
-		# bot.message(with_text: /!mh\s\w+\s.*/i) do |event|
-		# 	results = 'placeholder'
-		# 	event.message.content.gsub(/(?:!mh\s)(\w+)\s(.*)/) do
-		# 		results = Kiranico.search($1, $2).join("\n")
-		# 	end
-		# 	event.respond(results)
-		# end
-
 		bot.message(with_text: /!mh\s(.*)/i) do |event|
 			results = 'placeholder'
 			event.message.content.gsub(/(?:!mh\s)(.*)/) do
