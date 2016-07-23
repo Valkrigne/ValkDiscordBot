@@ -26,14 +26,6 @@ class DiscordBot
 	end
 
 	def register_events
-		# bot.message(from: "Valkrigne", containing: /(?:bot: )/) do |event|
-		# 	if (event.message.author.id == 73056257883254784)
-		# 		command = event.message.content.gsub(/^(?:bot: )(.*)/, '\1')
-		# 		response = eval(command)
-		# 		event.respond(response)
-		# 	end
-		# end
-
 		bot.message(with_text: /^(?:(?:bot|athena)\:\s)/i ) do |event|
 			user = get_user(event.message.author)
 			::RecordedMessage.create(user_id: user.id, message: event.message.content.gsub(/^(?:(?:bot|athena): )/i, ''))

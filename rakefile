@@ -5,7 +5,5 @@ import './db/db.rake'
 task default: %w[spec]
 
 task :spec do
-  RSpec::Core::RakeTask.new(:spec) do |t|
-    t.pattern = Dir.glob('app/spec/**/*_spec.rb')
-  end
+  sh 'rspec spec'
 end
