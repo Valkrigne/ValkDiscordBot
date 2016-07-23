@@ -8,4 +8,7 @@ deploy:
   on:
     tags: true
 
-script: bundle install && rspec spec
+install:
+- bundle install
+
+script: rspec spec
