@@ -9,7 +9,7 @@ deploy:
     tags: true
 
 install:
-  - ls
+  - ./bin/install.sh
   - BUNDLE_GEMFILE=gemfile bundle install
 
 script: rspec spec
