@@ -1,8 +1,5 @@
 require './options.rb'
-require './config/gem_check.rb'
-require './config/gem_install.rb'
-require './config/bot_install.rb'
-require './main/main.rb'
+require File.expand_path('../config/environment.rb', __FILE__)
 
 options = option_parse
 
@@ -17,10 +14,9 @@ if options[:install]
 end
 
 # check dependencies
-GemCheck.check_gem_library(false)
-
-# run initializers
-require './initializer.rb'
-
-# run bot
-run_bot
+if GemCheck.check_gem_library(false)
+  # run bot
+  run_bot
+else
+  p "required dependencies not found, run boot.rb -i"
+end

@@ -1,7 +1,8 @@
 module GemCheck
   def self.check_gem_library(output)
     gemfile = File.new('./config/gemfile')
-    dependecy_met = true;
+    dependecy_met = true
+
     while (line = gemfile.gets)
       g = line.strip.split(',')
       gem_name = g[0]
@@ -20,6 +21,6 @@ module GemCheck
     end
     gemfile.close
 
-    exit unless (dependecy_met && !output)
+    return dependecy_met = true
   end
 end
