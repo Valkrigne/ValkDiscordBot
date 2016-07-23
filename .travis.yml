@@ -12,5 +12,6 @@ install:
   - chmod 777 ./bin/install.sh
   - ./bin/install.sh
   - BUNDLE_GEMFILE=gemfile bundle install
+  - rake db:create db:migrate
 
 script: rspec spec
