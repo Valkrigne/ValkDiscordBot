@@ -12,7 +12,6 @@ module BotInstall
     def setup_db
       `createdb #{DB['default']['database']}`
         # load schema
-      end
     end
   end
 end

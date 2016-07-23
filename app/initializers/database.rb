@@ -1,3 +1,4 @@
 require 'pg'
-DB = YAML.load_file('./config/database_settings.yml')
-@db = PG.connect( dbname: DB['default']['database'] )
+db_config       = YAML::load(File.open('./config/database.yml'))
+db_config_admin = db_config.merge({'database' => 'postgres', 'schema_search_path' => 'public'})
+ActiveRecord::Base.establish_connection(db_config)
