@@ -9,6 +9,6 @@ deploy:
     tags: true
 
 install:
-- bundle install
+  - BUNDLE_GEMFILE=Gemfile bundle install
 
 script: rspec spec
