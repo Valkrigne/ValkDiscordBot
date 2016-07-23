@@ -1,3 +1,0 @@
-default: &default
-  adapter: pg
-  database: bot_db
