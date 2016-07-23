@@ -2,5 +2,6 @@ import './db/db.rake'
 task default: %w[spec]
 
 task :spec do
+  sh 'bundle install'
   sh 'rspec spec'
 end
