@@ -3,8 +3,7 @@ require "yaml"
 require 'zlib'
 
 namespace :db do
-
-  db_config       = YAML::load(File.open('../config/database.yml'))
+  db_config       = YAML::load(File.open('./app/config/database.yml'))
   db_config_admin = db_config.merge({'database' => 'postgres', 'schema_search_path' => 'public'})
 
   desc "Create the database"
@@ -17,7 +16,7 @@ namespace :db do
   desc "Migrate the database"
   task :migrate do
     ActiveRecord::Base.establish_connection(db_config)
-    ActiveRecord::Migrator.migrate("../db/migrate/")
+    ActiveRecord::Migrator.migrate("./db/migrate/")
     Rake::Task["db:schema"].invoke
     puts "Database migrated."
   end
@@ -36,7 +35,7 @@ namespace :db do
   task :schema do
     ActiveRecord::Base.establish_connection(db_config)
     require 'active_record/schema_dumper'
-    filename = "../db/schema.rb"
+    filename = "./db/schema.rb"
     File.open(filename, "w:utf-8") do |file|
       ActiveRecord::SchemaDumper.dump(ActiveRecord::Base.connection, file)
     end
@@ -49,7 +48,7 @@ namespace :g do
   task :migration do
     name = ARGV[1] || raise("Specify name: rake g:migration your_migration")
     timestamp = Time.now.strftime("%Y%m%d%H%M%S")
-    path = File.expand_path("../../db/migrate/#{timestamp}_#{name}.rb", __FILE__)
+    path = File.expand_path("./app/db/migrate/#{timestamp}_#{name}.rb", __FILE__)
     migration_class = name.split("_").map(&:capitalize).join
 
     File.open(path, 'w') do |file|
