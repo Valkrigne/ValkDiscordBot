@@ -2,11 +2,11 @@ require 'discordrb'
 
 class DiscordBot
 	def token
-		@token = BOT_ENV[:bot][:token]
+		@token = 'MjA0MTkxNzI3OTc0NzQ0MDY1.Cmz33Q.gTitaYpM_ud4WcUfO8MwE6YnlGs'
 	end
 
 	def app_id
-		@app_id = BOT_ENV[:bot][:app_id]
+		@app_id = 204191727974744065
 	end
 
 	def channels
@@ -57,7 +57,12 @@ class DiscordBot
 		bot.message(with_text: /!mh\s(.*)/i) do |event|
 			results = 'placeholder'
 			event.message.content.gsub(/(?:!mh\s)(.*)/) do
-				results = Kiranico.search_monster($1).join("\n")
+				results = Kiranico.search_monster($1)
+			end
+                        if results == false
+				results = 'nothing found'
+			else
+				results = results.join("\n")
 			end
 			event.respond(results)
 		end
