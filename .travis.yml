@@ -10,6 +10,6 @@ deploy:
 
 install:
   - ls
-  - BUNDLE_GEMFILE=Gemfile bundle install
+  - BUNDLE_GEMFILE=gemfile bundle install
 
 script: rspec spec
