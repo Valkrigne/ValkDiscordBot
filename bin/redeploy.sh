@@ -2,7 +2,8 @@
 
 # kill old process
 id=`pgrep -f run.rb`
-kill -9 $id
+cmd="kill -9 $id"
+eval $cmd
 
 # pull from repo
 git pull origin master
@@ -10,4 +11,4 @@ bundle install
 rake db:migrate
 
 # run in background
-nohup ./run.rb 0<&- &> logs/log.txt &
+echo `nohup ./run.rb 0<&- &> logs/log.txt &`
