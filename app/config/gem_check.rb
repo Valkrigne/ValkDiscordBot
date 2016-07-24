@@ -1,6 +1,6 @@
 module GemCheck
   def self.check_gem_library(output)
-    gemfile = File.new('./app/config/gemfile')
+    gemfile = File.new('./Gemfile')
     dependecy_met = true
 
     while (line = gemfile.gets)
