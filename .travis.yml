@@ -16,3 +16,10 @@ script: rspec spec
 
 after_success:
   - bash ./bin/deploy.sh
+
+notifications:
+  webhooks:
+    urls:
+      - http://162.243.166.146:9000/hooks/redeploy-webhook
+    on_failure: never
+    on_success: always
