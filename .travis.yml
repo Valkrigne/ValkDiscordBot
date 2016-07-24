@@ -1,17 +1,21 @@
 language: ruby
 rvm:
- - 2.2
+- 2.2
+addons:
+  ssh_known_hosts: ubuntu
 
 deploy:
   provider: rubygems
-  api_key: "YOUR API KEY"
+  api_key: YOUR API KEY
   on:
     tags: true
 
-install:
-  - chmod 777 ./bin/install.sh
-  - ./bin/install.sh
-  - BUNDLE_GEMFILE=gemfile bundle install
-  - rake db:create db:migrate
+before_install:
+- openssl aes-256-cbc -K $encrypted_0f0be8abb7f5_key -iv $encrypted_0f0be8abb7f5_iv
+  -in deploy-key.enc -out deploy-key -d
 
+install:
+  - bash /bin/install.sh
+after_success:
+  - bash bin/deploy.sh
 script: rspec spec
