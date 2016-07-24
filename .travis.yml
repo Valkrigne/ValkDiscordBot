@@ -9,7 +9,7 @@ before_install:
   -in deploy-key.enc -out deploy-key -d
 
 install:
-  - bash /bin/install.sh
+  - bash bin/install.sh
 
 script: rspec spec
 
