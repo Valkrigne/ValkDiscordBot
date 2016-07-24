@@ -14,7 +14,7 @@ else
   echo 'Edit config/application.yml to match your local setup'
 fi
 
-BUNDLE_GEMFILE=Gemfile bundle install
+BUNDLE_GEMFILE=gemfile bundle install
 rake db:create db:migrate
 
 # Import the SSH deployment key
