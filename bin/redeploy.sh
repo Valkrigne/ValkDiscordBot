@@ -18,5 +18,6 @@ elif [ $LOCAL = $BASE ]; then
   rake db:migrate
 
   # run in background
-  echo `nohup ./run.rb 0<&- &> logs/log.txt &`
+  `chmod +x run.rb`
+  `nohup ./run.rb 0<&- &> logs/log.txt &`
 fi

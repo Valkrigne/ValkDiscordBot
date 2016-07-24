@@ -9,6 +9,6 @@ class CreateRecordedMessages < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table recorded_messages
+    drop_table :recorded_messages
   end
 end
