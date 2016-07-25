@@ -42,12 +42,28 @@ class DiscordBot
 			event.message.content.gsub(/(?:!mh\s)(.*)/) do
 				results = Kiranico.search_monster($1)
 			end
-                        if results == false
+    	 if results == false
 				results = 'nothing found'
 			else
 				results = results.join("\n")
 			end
 			event.respond(results)
+		end
+
+		bot.message(with_text: /!ow/) do |event|
+			if event.message.content == '!ow'
+				response = "!ow <battletag> to pull overwatch stats"
+			elsif event.message.content.match(/!ow\s([a-z]+#[0-9]+)/)
+				battletag = event.message.content.gsub(/!ow\s([a-z]+#[0-9]+)/, '\1')
+				user = get_user(event.message.author)
+				if Overwatch.check_battletag(battletag)
+					stats = Overwatch.get_player_data(battletag)
+					response = "Name: #{stats[0]}\nLevel: #{stats[1]}\nStats By Role: #{stats[2]}\nTop Heroes: #{stats[3]}"
+				else
+					event.respond("Battletag not found")
+				end
+				event.respond(response)
+			end
 		end
 	end
 
