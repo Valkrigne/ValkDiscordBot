@@ -1,6 +1,6 @@
 module Kiranico
   class << self
-    def register
+    def register(bot)
       func = Proc.new do |event|
         results = 'placeholder'
   			event.message.content.gsub(/(?:test!mh\s)(.*)/) do
@@ -13,7 +13,7 @@ module Kiranico
   			end
         return results
       end
-      Bot.register_event('message', { with_text: /test!mh\s(.*)/i } , func)
+      bot.register_event('message', { with_text: /test!mh\s(.*)/i } , func)
     end
 
     def search(category, query)

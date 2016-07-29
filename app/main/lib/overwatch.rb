@@ -1,10 +1,10 @@
 module Overwatch
   class << self
-    def register
+    def register(bot)
       func = Proc.new do |event|
         # stuff
       end
-      Bot.register_event('message', { with_text: /^(?:(?:bot|athena)\:\s)/i }, func)
+      bot.register_event('message', { with_text: /^(?:(?:bot|athena)\:\s)/i }, func)
     end
 
     def check_battletag(battletag)
