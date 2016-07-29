@@ -1,5 +1,21 @@
 module Kiranico
   class << self
+    def register
+      func = Proc.new do |event|
+        results = 'placeholder'
+  			event.message.content.gsub(/(?:test!mh\s)(.*)/) do
+  				results = Kiranico.search_monster($1)
+  			end
+      	 if results == false
+  				results = 'nothing found'
+  			else
+  				results = results.join("\n")
+  			end
+        return results
+      end
+      Bot.register_event('message', { with_text: /test!mh\s(.*)/i } , func)
+    end
+
     def search(category, query)
       result_arrays = []
       search_index[category]['data'].map{ |m| result_arrays.push m if m['n'].match(/#{query}/i) }
