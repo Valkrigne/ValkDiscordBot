@@ -1,5 +1,12 @@
 module Overwatch
   class << self
+    def register
+      func = Proc.new do |event|
+        # stuff
+      end
+      Bot.register_event('message', { with_text: /^(?:(?:bot|athena)\:\s)/i }, func)
+    end
+
     def check_battletag(battletag)
       url = URLS[:BATTLE_TAG_CHECK] % { REGION: 'us', battletag: battletag }
       response = ApiConnector.head(url)
@@ -19,7 +26,6 @@ module Overwatch
       end
 
       page = ApiConnector.nokogiri_get(path)
-
 
       page
       header = page.css('div.image-with-corner').children[0]
