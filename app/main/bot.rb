@@ -25,15 +25,6 @@ class DiscordBot
 		return ::User.find_or_create(author.id, author.display_name)
 	end
 
-	def register_event(type, trigger, function)
-		case type
-		when 'message'
-			bot.message(trigger) do |event|
-				event.respond(function.call(event))
-			end
-		end
-	end
-
 	def register_events
 		bot.message(with_text: /^(?:(?:bot|athena)\:\s)/i ) do |event|
 			user = get_user(event.message.author)
