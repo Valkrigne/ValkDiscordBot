@@ -52,7 +52,7 @@ class DiscordBot
 
 		bot.message(with_text: /!ow/) do |event|
 			if event.message.content == '!ow'
-				response = "!ow <battletag> to pull overwatch stats"
+				event.respond("!ow <battletag> to pull overwatch stats")
 			elsif event.message.content.match(/!ow\s([a-z]+#[0-9]+)/)
 				battletag = event.message.content.gsub(/!ow\s([a-z]+#[0-9]+)/, '\1')
 				user = get_user(event.message.author)
