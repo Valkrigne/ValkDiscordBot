@@ -1,30 +1,32 @@
 module Overwatch
-  REGEX = /^(?:(?:bot|athena)\:\s)/i
+  REGEX = /^!ow.*/i
 
   class << self
     def register(bot)
-      func = Proc.new { Overwatch.function(event) }
+      func = Proc.new do |event|
+        Overwatch.function(event)
+      end
       bot.register_event('message', { with_text: Overwatch::REGEX }, func)
     end
 
     def function(event)
       if event.message.content == '!ow'
-        response = "!ow <battletag> to pull overwatch stats"
-      elsif event.message.content.match(/!ow\s([a-z]+#[0-9]+)/)
-        battletag = event.message.content.gsub(/!ow\s([a-z]+#[0-9]+)/, '\1')
-        user = get_user(event.message.author)
-        if Overwatch.check_battletag(battletag)
+        return "!ow <battletag> to pull overwatch stats"
+      elsif event.message.content.match(/!ow\s([a-z]+#[0-9]+)/i)
+        battletag = event.message.content.gsub(/!ow\s([a-z]+#[0-9]+)/i, '\1').gsub(/#/, '-')
+        puts battletag
+        if true #overbuff doesnt respond to HEAD call Overwatch.check_battletag(battletag) ||
           stats = Overwatch.get_player_data(battletag)
-          response = "Name: #{stats[0]}\nLevel: #{stats[1]}\nStats By Role: #{stats[2]}\nTop Heroes: #{stats[3]}"
+          return "Name: #{stats[0]}\nLevel: #{stats[1]}\nStats By Role: #{stats[2]}\nTop Heroes: #{stats[3]}"
         else
-          event.respond("Battletag not found")
+          return "Battletag not found"
         end
-        event.respond(response)
       end
     end
 
     def check_battletag(battletag)
-      url = URLS[:BATTLE_TAG_CHECK] % { REGION: 'us', battletag: battletag }
+      url = URLS[:BATTLE_TAG_CHECK] % { battletag: battletag }
+      puts url
       response = ApiConnector.head(url)
       if response.code >= 400
         return false
@@ -37,6 +39,7 @@ module Overwatch
 
     def get_player_data(playername)
       battletag = playername.gsub(/#/, '-')
+      path = URLS[:BATTLE_TAG_CHECK] % { battletag: battletag }
       if battletag.gsub(/-[0-9]/, '').length == 0
         return false
       end
