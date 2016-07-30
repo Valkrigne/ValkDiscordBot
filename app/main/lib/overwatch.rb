@@ -1,10 +1,26 @@
 module Overwatch
+  REGEX = /^(?:(?:bot|athena)\:\s)/i
+
   class << self
-    def register
-      func = Proc.new do |event|
-        # stuff
+    def register(bot)
+      func = Proc.new { Overwatch.function(event) }
+      bot.register_event('message', { with_text: Overwatch::REGEX }, func)
+    end
+
+    def function(event)
+      if event.message.content == '!ow'
+        response = "!ow <battletag> to pull overwatch stats"
+      elsif event.message.content.match(/!ow\s([a-z]+#[0-9]+)/)
+        battletag = event.message.content.gsub(/!ow\s([a-z]+#[0-9]+)/, '\1')
+        user = get_user(event.message.author)
+        if Overwatch.check_battletag(battletag)
+          stats = Overwatch.get_player_data(battletag)
+          response = "Name: #{stats[0]}\nLevel: #{stats[1]}\nStats By Role: #{stats[2]}\nTop Heroes: #{stats[3]}"
+        else
+          event.respond("Battletag not found")
+        end
+        event.respond(response)
       end
-      Bot.register_event('message', { with_text: /^(?:(?:bot|athena)\:\s)/i }, func)
     end
 
     def check_battletag(battletag)

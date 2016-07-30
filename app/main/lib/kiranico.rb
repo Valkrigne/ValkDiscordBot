@@ -1,19 +1,23 @@
 module Kiranico
+  REGEX = /test!mh\s(.*)/i
+
   class << self
-    def register
-      func = Proc.new do |event|
-        results = 'placeholder'
-  			event.message.content.gsub(/(?:test!mh\s)(.*)/) do
-  				results = Kiranico.search_monster($1)
-  			end
-      	 if results == false
-  				results = 'nothing found'
-  			else
-  				results = results.join("\n")
-  			end
-        return results
+    def register(bot)
+      func = Proc.new { Kiranico.function(event) }
+      bot.register_event('message', { with_text: Kiranico::REGEX } , func)
+    end
+
+    def function(event)
+      results = 'placeholder'
+      event.message.content.gsub(/(?:test!mh\s)(.*)/) do
+        results = Kiranico.search_monster($1)
       end
-      Bot.register_event('message', { with_text: /test!mh\s(.*)/i } , func)
+       if results == false
+        results = 'nothing found'
+      else
+        results = results.join("\n")
+      end
+      return results
     end
 
     def search(category, query)
