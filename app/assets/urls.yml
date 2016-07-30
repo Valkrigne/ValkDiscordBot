@@ -1,5 +1,5 @@
 KIRANICO_SEARCH_URL: http://mhgen.kiranico.com/build/js/search_prefetch_en-9f6702e984.json
 KIRANICO_ROOT_URL: http://mhgen.kiranico.com/%{category}%{path}
 MTG_SEARCH_URL: https://api.magicthegathering.io/v1/cards?
-BATTLE_TAG_CHECK: https://playoverwatch.com/en-gb/career/pc/${region}/${battletag}`
-OVERWATCH_BATTLETAG_GET: https://www.overbuff.com/players/pc/${battletag}
+BATTLE_TAG_CHECK: http://www.overbuff.com/players/pc/%{battletag}
+OVERWATCH_BATTLETAG_GET: https://www.overbuff.com/players/pc/%{battletag}

@@ -29,36 +29,32 @@ class DiscordBot
 		case type
 		when 'message'
 			bot.message(trigger) do |event|
+				puts 'trigger'
 				get_user(event.message.author)
-				event.respond(function.call(event))
+				response = run_event(event, &function)
+				puts response
+				event.respond(response)
 			end
 		end
 	end
 
+	def run_event(event)
+		yield event
+	end
+
 	def register_events
 		bot.message(with_text: /^(?:(?:bot|athena)\:\s)/i ) do |event|
+			puts 'trigger'
 			user = get_user(event.message.author)
 			::RecordedMessage.create(user_id: user.id, message: event.message.content.gsub(/^(?:(?:bot|athena): )/i, ''))
 		end
 
 		bot.message(with_text: /!(?:bot|athena)/i) do |event|
+			puts 'trigger'
 			user = get_user(event.message.author)
 			help_response = "bot/athena: <message> will be recorded\nie: athena: this bot doesnt do shiti\n!mh <monster_name> retunrs kiranico url"
 			event.respond(help_response)
 		end
-
-		# bot.message(with_text: /!mh\s(.*)/i) do |event|
-		# 	results = 'placeholder'
-		# 	event.message.content.gsub(/(?:!mh\s)(.*)/) do
-		# 		results = Kiranico.search_monster($1)
-		# 	end
-    # 	 if results == false
-		# 		results = 'nothing found'
-		# 	else
-		# 		results = results.join("\n")
-		# 	end
-		# 	event.respond(results)
-		# end
 	end
 
 	def members
