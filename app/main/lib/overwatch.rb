@@ -11,83 +11,95 @@ module Overwatch
 
     def function(event)
       if event.message.content == '!ow'
-        return "!ow <battletag> to pull overwatch stats"
-      elsif event.message.content.match(/!ow\s([a-z]+#[0-9]+)/i)
-        battletag = event.message.content.gsub(/!ow\s([a-z]+#[0-9]+)/i, '\1').gsub(/#/, '-')
-        puts battletag
-        if true #overbuff doesnt respond to HEAD call Overwatch.check_battletag(battletag) ||
-          stats = Overwatch.get_player_data(battletag)
-          return "Name: #{stats[0]}\nLevel: #{stats[1]}\nStats By Role: #{stats[2]}\nTop Heroes: #{stats[3]}"
+        user = User.find_by(discord_id: event.author.id)
+        if user.present?
+          stats = Overwatch.player_data(user.battletag)
+          return OutputFormatter.overwatch(stats)
         else
-          return "Battletag not found"
+          return
         end
+      elsif event.message.content.match(/(^!ow$|^!ow\s<help>$|^!ow\s\?$)/)
+        return "!ow <battletag> to pull overwatch stats\n!ow set/save <battletag> to set a battletag to your discord account\n!ow s/search <battletag/discord user> to search for other user's battletags"
+      elsif event.message.content.match(/!ow\s(?:search|s)\s((?:[a-z]+#[0-9]+)|(?:.*[^#]))/i)
+        name = event.message.content.gsub(/!ow\s(?:search|s)\s((?:[a-z]+#[0-9]+)|(?:.*[^#]))/i, '\1')
+        response = "searching for #{name}"
+        if name.match(/#/)
+          user = User.find_by(battletag: name)
+          if user.nil?
+            user = User.find_by(name: name)
+            if user.nil?
+              return "#{name} not found"
+            end
+          end
+        else
+          user = User.find_by(name: name)
+          if user.nil?
+            return "#{name} not found"
+          end
+        end
+        stats = Overwatch.player_data(user.battletag)
+        return OutputFormatter.overwatch(stats)
+      elsif event.message.content.match(/!ow\s(?:set|save)\s([a-z]+#[0-9]+)/i)
+        battletag = event.message.content.gsub(/!ow\s(?:set|save)\s([a-z]+#[0-9]+)/i, '\1')
+        ::User.find_or_create_battletag(event.author.id, event.author.display_name, battletag)
+        return "Saving Battletag: #{battletag} to User: #{event.author.display_name}"
+      elsif event.message.content.match(/!ow\s([a-z]+#[0-9]+)/i)
+        battletag = event.message.content.gsub(/!ow\s([a-z]+#[0-9]+)/i, '\1')
+        ::User.find_or_create(event.author.id, event.author.display_name)
+        stats = Overwatch.player_data(battletag)
+        return OutputFormatter.overwatch(stats)
       end
+    else
+      return "!ow <battletag> to pull overwatch stats\n!ow set/save <battletag> to set a battletag to your discord account\n!ow s/search <battletag/discord user> to search for other user's battletags"
     end
 
-    def check_battletag(battletag)
-      url = URLS[:BATTLE_TAG_CHECK] % { battletag: battletag }
-      puts url
-      response = ApiConnector.head(url)
-      if response.code >= 400
-        return false
-      elsif response.code == 200
-        return true
-      else
-        return false
-      end
-    end
-
-    def get_player_data(playername)
+    def player_data(playername)
       battletag = playername.gsub(/#/, '-')
-      path = URLS[:BATTLE_TAG_CHECK] % { battletag: battletag }
-      if battletag.gsub(/-[0-9]/, '').length == 0
-        return false
-      end
-
+      path = URLS[:OVERWATCH_BATTLETAG_GET] % { battletag: battletag }
       page = ApiConnector.nokogiri_get(path)
+      name = page.css("div.header-box h1").children.to_s.gsub(/([a-z]#[0-9]+)\s.*/, '\1')
+      level = page.css("div.header-avatar span").children.to_s
 
-      page
-      header = page.css('div.image-with-corner').children[0]
-      name = page.css('div.image-with-corner').children[0].to_s.gsub(/.*alt=\"(\w+)\".*/, '\1')
-      level = page.css('div.image-with-corner').children[1].children.to_s
-
-      stats = page.css('div.layout-header-secondary')
-      on_fire =  page.css('div.layout-header-secondary').children[0].children.children[0].to_s
-      games_won = page.css('div.layout-header-secondary').children[1].children.children.children[0].children.to_s.to_i
-      games_lost = page.css('div.layout-header-secondary').children[1].children.children.children[2].children.to_s.to_i
-      win_rate = page.css('div.layout-header-secondary').children[2].children.children[0].to_s.to_f
-
-      roles = page.css('div[data-portable=roles]')
-      roles = [
-        get_role_data(page, 0),
-        get_role_data(page, 1),
-        get_role_data(page, 2),
-        get_role_data(page, 3)
+      hero_stats = page.css("div.stats-list div.stats-list-box")
+      stats = [
+        get_game_stats(hero_stats, 0),
+        get_game_stats(hero_stats, 1),
+        get_game_stats(hero_stats, 2),
+        get_game_stats(hero_stats, 3),
+        get_game_stats(hero_stats, 4),
+        get_game_stats(hero_stats, 5)
       ]
 
-      top_heroes = [
-        get_hero_data(page, 0),
-        get_hero_data(page, 1),
-        get_hero_data(page, 2),
-        get_hero_data(page, 3),
-        get_hero_data(page, 4)
+      top_hero = page.css("div.data-heroes")
+      hero_stats = [
+        get_hero_data(top_hero, 0),
+        get_hero_data(top_hero, 1),
+        get_hero_data(top_hero, 2),
+        get_hero_data(top_hero, 3),
+        get_hero_data(top_hero, 4)
       ]
-      return [name, level, roles, top_heroes]
+      return {
+        name: name,
+        level: level,
+        stats: stats,
+        top_heroes: hero_stats
+      }
     end
 
-    def get_role_data(page, index)
+    def get_game_stats(page, index)
       {
-        name: page.css('div[data-portable=roles] section article table tbody tr')[index].children[1].children.children.children[0].to_s,
-        games_played: page.css('div[data-portable=roles] section article table tbody tr')[index].children[2].children[0].to_s,
-        win_rate: page.css('div[data-portable=roles] section article table tbody tr')[index].children[3].children[0].to_s
+        stat: page[index].css("span.stats-label").children.to_s,
+        value: page[index].css("strong.stats-value").children.to_s,
+        percentile: page[index].css("small.stats-percentile").children[1].children.to_s.capitalize
       }
     end
 
     def get_hero_data(page, index)
        {
-         name: page.css('div.player-hero')[index].children.children.children[1].children.children[0].to_s,
-         wins: page.css('div.player-hero')[index].children.children.children[4].children.children.children[0],
-         losses: page.css('div.player-hero')[index].children.children.children[4].children.children.children[2]
+         hero: page.css("div.heroes-details")[index].css("div.heroes-details-card div.card-hero-name strong").children.to_s,
+         games_played: page.css("div.heroes-details")[index].css("div.heroes-details-card div.card-hero-name span").children.to_s,
+         playtime: page.css("div.heroes-details")[index].css("div.heroes-details-card div.card-primary-stats span.stat-playtime").children[0].to_s,
+         winrate: page.css("div.heroes-details")[index].css("div.heroes-details-card div.card-primary-stats div.card-primary-stat")[3].css("strong span").children.to_s
        }
     end
   end
