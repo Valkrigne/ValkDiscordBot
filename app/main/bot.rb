@@ -2,11 +2,11 @@ require 'discordrb'
 
 class DiscordBot
 	def token
-		@token = 'MjA0MTkxNzI3OTc0NzQ0MDY1.Cmz33Q.gTitaYpM_ud4WcUfO8MwE6YnlGs'
+		@token = BOT_ENV[:bot][:token]
 	end
 
 	def app_id
-		@app_id = 204191727974744065
+		@app_id = BOT_ENV[:bot][:app_id]
 	end
 
 	def channels
@@ -25,14 +25,17 @@ class DiscordBot
 		return ::User.find_or_create(author.id, author.display_name)
 	end
 
+	def record_message(user_id, message)
+		RecordedMessage.create user_id: user_id, message: message
+	end
+
 	def register_event(type, trigger, function)
 		case type
 		when 'message'
 			bot.message(trigger) do |event|
-				puts 'trigger'
-				get_user(event.message.author)
+				user = get_user(event.message.author)
+				record_message(user.id, event.message.content)
 				response = run_event(event, &function)
-				puts response
 				event.respond(response)
 			end
 		end
@@ -44,14 +47,22 @@ class DiscordBot
 
 	def register_events
 		bot.message(with_text: /^(?:(?:bot|athena)\:\s)/i ) do |event|
-			puts 'trigger'
 			user = get_user(event.message.author)
 			::RecordedMessage.create(user_id: user.id, message: event.message.content.gsub(/^(?:(?:bot|athena): )/i, ''))
 		end
 
-		bot.message(with_text: /!(?:bot|athena)/i) do |event|
-			puts 'trigger'
+		bot.message(with_text: /^!(btags|battletags)/) do |event|
 			user = get_user(event.message.author)
+			users = User.where.not(battletag: nil)
+			response = ""
+			users.map { |u| response += "#{u.name}: #{u.battletag}\n"}
+			response.strip!
+			event.respond(response)
+		end
+
+		bot.message(with_text: /!(?:bot|athena)/i) do |event|
+			user = get_user(event.message.author)
+			record_message(user.id, event.message.content)
 			help_response = "bot/athena: <message> will be recorded\nie: athena: this bot doesnt do shiti\n!mh <monster_name> retunrs kiranico url"
 			event.respond(help_response)
 		end
