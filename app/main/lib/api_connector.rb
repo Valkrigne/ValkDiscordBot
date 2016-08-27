@@ -5,17 +5,27 @@ require 'json'
 module ApiConnector
   class << self
     def get(path)
-      response = RestClient.get path
-      return JSON.parse(response.to_s)
+      begin
+        response = RestClient.get path
+        return JSON.parse(response.to_s)
+      rescue => e
+        return e.response
+      end
     end
 
     def head(path)
-      response = RestClient.head path
-      return JSON.parse(response.to_s)
+      begin
+        response = RestClient.head path
+        return JSON.parse(response.to_s)
+      rescue => e
+        return e.response
+      end
     end
 
     def nokogiri_get(path)
-      return Nokogiri::HTML(RestClient.get(path))
+      response = RestClient.get(path)
+      return response if response.code >= 400
+      return Nokogiri::HTML(response)
     end
   end
 end

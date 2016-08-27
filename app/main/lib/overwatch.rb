@@ -47,16 +47,18 @@ module Overwatch
         battletag = event.message.content.gsub(/!ow\s([a-z]+#[0-9]+)/i, '\1')
         ::User.find_or_create(event.author.id, event.author.display_name)
         stats = Overwatch.player_data(battletag)
+        return "#{battletag} not found" unless page
         return OutputFormatter.overwatch(stats)
+      else
+        return "!ow <battletag> to pull overwatch stats\n!ow set/save <battletag> to set a battletag to your discord account\n!ow s/search <battletag/discord user> to search for other user's battletags"
       end
-    else
-      return "!ow <battletag> to pull overwatch stats\n!ow set/save <battletag> to set a battletag to your discord account\n!ow s/search <battletag/discord user> to search for other user's battletags"
     end
 
     def player_data(playername)
       battletag = playername.gsub(/#/, '-')
       path = URLS[:OVERWATCH_BATTLETAG_GET] % { battletag: battletag }
       page = ApiConnector.nokogiri_get(path)
+      return false if page.class == RestClient::Response && page.status >= 400
       name = page.css("div.header-box h1").children.to_s.gsub(/([a-z]#[0-9]+)\s.*/, '\1')
       level = page.css("div.header-avatar span").children.to_s
 

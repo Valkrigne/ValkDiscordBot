@@ -2,3 +2,14 @@ KIRANICO_SEARCH_URL: http://mhgen.kiranico.com/build/js/search_prefetch_en-9f670
 KIRANICO_ROOT_URL: http://mhgen.kiranico.com/%{category}%{path}
 MTG_SEARCH_URL: https://api.magicthegathering.io/v1/cards?
 OVERWATCH_BATTLETAG_GET: http://masteroverwatch.com/profile/pc/us/%{battletag}
+BATTLENET:
+  ROOT: https://us.api.battle.net
+  ACHIEVEMENT: /wow/achievment/%{query}
+  AUCTION: /wow/auction/data/%{query}
+  BOSS: /wow/%{query}
+  CHALLENGEMODE: /wow/challenge/%{query}
+  CHARACTER: /wow/character/%{realm}/%{query}
+  GUILD: /wow/guild/%{query}
+  ITEM: /wow/item/%{query}
+  MOUNT: /wow/mount/%{query}
+  REALMSTATUS: /wow/realm/status
