@@ -8,8 +8,8 @@ describe DiscordBot do
       expect(discord_bot.token).to_not be nil
     end
 
-    it 'should have a app id' do
-      expect(discord_bot.app_id).to_not be nil
+    it 'should have a client id' do
+      expect(discord_bot.client_id).to_not be nil
     end
   end
 

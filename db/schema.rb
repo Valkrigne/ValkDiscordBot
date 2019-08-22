@@ -10,26 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160724205626) do
+ActiveRecord::Schema.define(version: 2016_07_24_205626) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "recorded_messages", force: :cascade do |t|
-    t.bigint   "user_id",    null: false
-    t.string   "message",    null: false
+    t.bigint "user_id", null: false
+    t.string "message", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_recorded_messages_on_user_id", using: :btree
+    t.index ["user_id"], name: "index_recorded_messages_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
-    t.bigint   "discord_id", null: false
-    t.string   "name",       null: false
+    t.bigint "discord_id", null: false
+    t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string   "battletag"
-    t.index ["discord_id"], name: "index_users_on_discord_id", using: :btree
+    t.string "battletag"
+    t.index ["discord_id"], name: "index_users_on_discord_id"
   end
 
 end
