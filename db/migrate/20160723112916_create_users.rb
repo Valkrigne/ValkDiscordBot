@@ -1,5 +1,5 @@
-class CreateUsers < ActiveRecord::Migration
-  def self.up
+class CreateUsers < ActiveRecord::Migration[5.2]
+  def up
     create_table :users do |t|
       t.bigint :discord_id, null: false, index: true, unique: true
       t.string :name, null: false
@@ -8,7 +8,7 @@ class CreateUsers < ActiveRecord::Migration
     end
   end
 
-  def self.down
+  def down
     drop_table :users
   end
 end

@@ -1,8 +1,8 @@
-class AddBattletagToUsers < ActiveRecord::Migration
-  def self.up
+class AddBattletagToUsers < ActiveRecord::Migration[5.2]
+  def up
     add_column :users, :battletag, :string, null: true
   end
-  def self.down
+  def down
     drop_column :users, :battletag
   end
 end

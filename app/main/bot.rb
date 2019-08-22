@@ -2,11 +2,11 @@ require 'discordrb'
 
 class DiscordBot
 	def token
-		@token = BOT_ENV[:bot][:token]
+		@token = BOT_ENV[:bot][:BOT_TOKEN]
 	end
 
-	def app_id
-		@app_id = BOT_ENV[:bot][:app_id]
+	def client_id
+		@app_id = BOT_ENV[:bot][:CLIENT_ID]
 	end
 
 	def channels
@@ -14,7 +14,7 @@ class DiscordBot
 	end
 
 	def bot
-		@bot ||= Discordrb::Bot.new token: token, application_id: app_id
+		@bot ||= Discordrb::Bot.new token: token, client_id: client_id
 	end
 
 	def run_bot
@@ -63,7 +63,7 @@ class DiscordBot
 		bot.message(with_text: /!(?:bot|athena)/i) do |event|
 			user = get_user(event.message.author)
 			record_message(user.id, event.message.content)
-			help_response = "bot/athena: <message> will be recorded\nie: athena: this bot doesnt do shiti\n!mh <monster_name> retunrs kiranico url"
+			help_response = "bot/athena: <message> will be recorded\nie: athena: this bot doesnt do anything\n!mh <monster_name> returns kiranico url"
 			event.respond(help_response)
 		end
 	end
