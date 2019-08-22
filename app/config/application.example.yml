@@ -1,6 +1,6 @@
 bot:
   BOT_TOKEN: 'bot_token'
-  APP_ID: '1263445678624'
+  CLIENT_ID: '1263445678624'
 
 channels:
   test: 123456789

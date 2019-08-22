@@ -1,4 +1,15 @@
-host: 'localhost'
-adapter: 'postgresql'
-encoding: utf-8
-database: 'test'
+default: &default
+  host: 'localhost'
+  adapter: 'postgresql'
+  encoding: utf-8
+  pool: 5
+
+development:
+  <<: *default
+  database: 'bot_dev'
+production:
+  <<: *default
+  database: 'bot_production'
+test:
+  <<: *default
+  database: 'bot_test'
